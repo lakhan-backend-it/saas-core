@@ -1,6 +1,10 @@
 import type { RequestHandler } from 'express';
 import { AppError } from '../errors/app-error';
 
+/**
+ * Entitlement gate: tenant must have `featureKey` enabled on its active plan.
+ * Call after `resolveTenant`. Super Admin bypasses for platform operations.
+ */
 export function requireFeature(featureKey: string): RequestHandler {
   return (req, _res, next) => {
     if (req.user?.isSuperAdmin) return next();

@@ -2,6 +2,7 @@ import type { RequestHandler } from 'express';
 import { AppError } from '../errors/app-error';
 import { verifyAccessToken } from '../helpers/jwt.helper';
 
+/** Bearer access JWT → `req.user`. Does not hit the DB (keep access tokens short-lived). */
 export const authenticate: RequestHandler = (req, _res, next) => {
   const header = req.header('authorization');
   if (!header?.startsWith('Bearer ')) {

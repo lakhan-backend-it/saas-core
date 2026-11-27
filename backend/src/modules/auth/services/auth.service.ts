@@ -65,8 +65,8 @@ function publicUser(user: {
 }
 
 /**
- * Register: creates user + new tenant workspace + TENANT_ADMIN membership.
- * Subscription/plan attach happens in subscriptions module (Super Admin or billing).
+ * Register: user + tenant workspace + TENANT_ADMIN membership + Free plan subscription.
+ * Upgrades go through Super Admin assign or simulated billing checkout.
  */
 export async function register(input: RegisterBody) {
   const existing = await prisma.user.findUnique({
@@ -107,6 +107,21 @@ export async function register(input: RegisterBody) {
         isDefault: true,
       },
     });
+
+    // SaaS default: every new workspace starts on Free (upgrade later).
+    const freePlan = await tx.plan.findFirst({
+      where: { code: 'free', deletedAt: null, isActive: true },
+      select: { id: true },
+    });
+    if (freePlan) {
+      await tx.subscription.create({
+        data: {
+          tenantId: tenant.id,
+          planId: freePlan.id,
+          status: 'ACTIVE',
+        },
+      });
+    }
 
     return { user, tenant };
   });

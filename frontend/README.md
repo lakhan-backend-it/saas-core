@@ -10,11 +10,11 @@ npm install
 npm run dev
 ```
 
-`.env`:
-
 ```env
 VITE_API_URL=http://localhost:4000/api/v1
 ```
+
+Production: `VITE_API_URL=https://saas-core-api.onrender.com/api/v1`
 
 ## Scripts
 
@@ -23,16 +23,21 @@ VITE_API_URL=http://localhost:4000/api/v1
 | `npm run dev` | Dev server |
 | `npm run build` | Production build |
 | `npm run preview` | Preview build |
-| `npm test` | Vitest unit tests |
+| `npm test` | Vitest (auth schemas) |
+| `npm run lint` | Typecheck |
 
 ## App areas
 
-- **Auth** — Login / Register
-- **Super Admin** — Plans, Features, Subscriptions, Tenants
-- **Tenant** — Dashboard, Projects, Tasks (gated), Users, Invites, Usage, Billing, Files (gated), Audit, Notifications
+- **Auth** — Login / Register / Accept invite
+- **Super Admin** — Plans, Features, Subscriptions, Tenants, Audit, Billing overview
+- **Tenant** — Dashboard, Projects, Tasks, Users, Invites, Usage, Billing, Files, Audit, Notifications
 
-API client attaches Bearer token + `X-Tenant-ID` from auth context. Feature flags from `/auth/me` drive menu + route access.
+API client attaches Bearer token + `X-Tenant-ID`. Feature-disabled routes show API 403 copy (Tasks/Files).
 
 ## Seed logins
 
-Use backend seed users (`superadmin@saas.local`, Free/Pro tenant admins) — see root `README.md`.
+See root `README.md` (`superadmin@saas.local`, Free/Pro tenant admins).
+
+## Live
+
+https://saas-core-web-nine.vercel.app

@@ -6,7 +6,7 @@ First production module — access + refresh JWT, multi-workspace aware.
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/api/v1/auth/register` | — | Create user + tenant + TENANT_ADMIN membership |
+| POST | `/api/v1/auth/register` | — | Create user + tenant + TENANT_ADMIN + Free subscription |
 | POST | `/api/v1/auth/login` | — | Login; optional `tenantId` |
 | POST | `/api/v1/auth/refresh` | — | Rotate refresh token; new access pair |
 | POST | `/api/v1/auth/logout` | — | Revoke refresh token |

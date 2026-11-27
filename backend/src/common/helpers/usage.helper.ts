@@ -18,6 +18,10 @@ export async function getUsage(tenantId: string, featureKey: string) {
   return { used: row?.used ?? 0, periodStart, periodEnd };
 }
 
+/**
+ * Soft quota check for the current UTC month.
+ * `limit == null` means unlimited. Pair with create + increment/sync in the same flow.
+ */
 export async function assertWithinLimit(
   tenantId: string,
   featureKey: string,

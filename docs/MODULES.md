@@ -106,7 +106,7 @@ With **memberships**, role is per tenant (except platform Super Admin).
 /api/v1/features
 /api/v1/subscriptions
 /api/v1/usage
-/api/v1/billing             checkout, portal, webhooks, invoices
+/api/v1/billing             checkout (simulated), invoices
 /api/v1/audit-logs
 /api/v1/notifications
 /api/v1/files

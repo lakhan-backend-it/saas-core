@@ -2,10 +2,16 @@ import type { RequestHandler } from 'express';
 import { prisma } from '../../lib/prisma';
 import { AppError } from '../errors/app-error';
 
+/**
+ * Resolve active tenant + plan features/limits onto `req.tenant`.
+ * Tenant id is taken from the JWT (trusted). `X-Tenant-ID` may only match —
+ * never override — so clients cannot spoof into another workspace.
+ */
 export const resolveTenant: RequestHandler = async (req, _res, next) => {
   try {
     if (!req.user) return next(AppError.unauthorized());
 
+    // Super Admin without workspace may optionally target a tenant via header.
     if (req.user.isSuperAdmin && !req.user.tenantId) {
       const headerTenant = req.header('x-tenant-id');
       if (!headerTenant) return next();

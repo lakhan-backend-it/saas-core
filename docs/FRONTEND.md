@@ -13,6 +13,8 @@ npm run dev
 App: http://localhost:5173  
 API: `VITE_API_URL` (default `http://localhost:4000/api/v1`)
 
+Live: https://saas-core-web-nine.vercel.app
+
 ## Built screens
 
 ### Auth
@@ -22,8 +24,11 @@ API: `VITE_API_URL` (default `http://localhost:4000/api/v1`)
 - Overview, Plans (+ feature toggles), Features, Tenants, Subscriptions, Audit, Billing invoices
 
 ### Tenant (`/app`)
-- Home, Projects, Tasks (feature-gated), Users, Invitations, Usage, Files (feature-gated), Notifications, Billing checkout (simulated)
+- Home, Projects, Tasks (API feature-gated), Users, Invitations, Usage, Files (API feature-gated), Notifications, Billing checkout (simulated)
 
-## Notes
-- Axios client auto-refreshes access tokens
-- 403 from feature gates surfaces as error copy on Tasks/Files
+## Client behaviour
+
+- Axios interceptor attaches Bearer access token
+- Single-flight refresh on 401; logout if refresh fails
+- `X-Tenant-ID` sent from active workspace in auth context
+- Tasks/Files surfaces show plan restriction messages when API returns `FEATURE_DISABLED`

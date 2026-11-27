@@ -14,39 +14,37 @@ npm run dev
 
 Required env (see `.env.example`):
 
-- `DATABASE_URL` — Postgres (Neon pooled URL recommended)
-- `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET`
+- `DATABASE_URL` — Postgres (Neon pooled URL + `sslmode=require`)
+- `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` (min 32 chars)
 - `PORT` (default `4000`)
-- `CORS_ORIGIN` (frontend origin)
+- `CORS_ORIGINS` — comma-separated frontend origins
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
 | `npm run dev` | Watch mode |
-| `npm run build` / `npm start` | Production |
+| `npm run build` / `npm start` | Production (`start` runs migrate deploy) |
 | `npm test` | Vitest integration suite |
 | `npm run prisma:seed` | Seed plans + demo tenants |
 | `npx prisma studio` | DB browser |
 
 ## Auth
 
-- Register creates user + tenant + OWNER membership + Free subscription
-- Login / refresh / logout with hashed refresh tokens
+- Register → user + tenant + `TENANT_ADMIN` + **Free** subscription
+- Login / refresh / logout with hashed refresh tokens (rotation)
 - `X-Tenant-ID` must match JWT `tenantId` (anti-spoof)
 - Roles: platform Super Admin (`isSuperAdmin`); membership `TENANT_ADMIN` / `TENANT_USER`
 
 ## Feature gating
 
-Middleware `requireFeature('tasks' | 'projects' | 'file_uploads' | …)` checks the tenant’s active subscription plan. Limits enforced via usage helpers before create.
+`requireFeature('tasks' | 'projects' | 'file_uploads' | …)` after `resolveTenant`.  
+Limits via `assertWithinLimit` + usage records on create.
 
 ## API surface
 
-Base path: `/api/v1`
-
-Modules: `auth`, `plans`, `features`, `subscriptions`, `tenants`, `users`, `projects`, `tasks`, `usage`, `invitations`, `audit-logs`, `notifications`, `files`, `billing`.
-
-Interactive docs: `/api/docs`
+Base: `/api/v1` — see [docs/API.md](../docs/API.md)  
+Swagger: `/api/docs`
 
 ## Testing
 
@@ -54,12 +52,6 @@ Interactive docs: `/api/docs`
 npm test
 ```
 
-Uses `NODE_ENV=test` (rate limits skipped). Hits the configured `DATABASE_URL` — prefer a non-prod Neon branch for CI.
+`NODE_ENV=test` skips rate limits. Prefer a non-prod Neon branch for CI.
 
-Tests cover:
-
-- Health live/ready
-- Auth register/login/me/refresh
-- RBAC (member cannot manage users)
-- Tenant isolation (cross-tenant project access denied)
-- Feature gating (Free blocked from tasks; Pro allowed)
+Covers: health, auth/refresh, RBAC, tenant isolation, Free vs Pro gates, invitations, usage/billing.

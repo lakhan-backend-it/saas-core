@@ -16,6 +16,7 @@ import { assertWithinLimit, incrementUsage } from '../../../common/helpers/usage
 import { idParamSchema } from '../../../common/schemas/id.schema';
 import { validate } from '../../../common/middleware/validate.middleware';
 
+/** Local disk storage for the practical task. Prefer private/signed URLs in production. */
 const uploadDir = path.resolve(process.cwd(), 'uploads');
 fs.mkdirSync(uploadDir, { recursive: true });
 

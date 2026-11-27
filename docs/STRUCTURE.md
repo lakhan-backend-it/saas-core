@@ -22,9 +22,9 @@ For the full module catalogue and build phases, see [MODULES.md](./MODULES.md).
 | Auth | JWT access + refresh, bcrypt |
 | Logging | pino |
 | Security | helmet, cors, rate-limit |
-| Billing | Stripe (test mode) |
-| Email | SMTP / provider adapter (invites) |
-| Files | S3-compatible or local disk (dev) |
+| Billing | Simulated checkout (Stripe-ready shape) |
+| Email | Invite accept URL (SMTP adapter optional) |
+| Files | Local disk demo (signed/private storage for prod) |
 | API docs | Swagger / OpenAPI |
 | Frontend | React + Vite + TypeScript |
 | Hosting | Backend: Railway / Render · Frontend: Vercel · DB: Neon / Railway |
